@@ -1,6 +1,8 @@
 require 'colorize'
 
 class Tile
+	attr_reader :occupied, :rosary
+
 	def initialize(rosary: false)
 		@rosary = rosary
 	end
@@ -9,13 +11,15 @@ class Tile
 		@occupied = player
 	end
 
-	attr_reader
+	def unoccupied?
+		occupied.nil?
+	end
 
 	def to_s
-		if @occupied
+		if occupied
 			" [ #{"X".send(@occupied.color.to_sym)} ] "
 		else
-			@rosary ? " [ #{"*".yellow} ] "  : ' [   ] '
+			rosary ? " [ #{"*".yellow} ] "  : ' [   ] '
 		end
 	end
 end

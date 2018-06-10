@@ -1,10 +1,11 @@
+require 'pry-byebug'
 module BoardPresenter
 	def self.print!(player_1, player_2)
 		print_stats(player_1, player_2)
 		player_1_board = player_1.board.dup
 		player_2_board = player_2.board.dup
 		print_top_row(player_1_board, player_2_board)
-		print_shared_board(player_1_board.shift)
+		print_shared_board(player_1_board.shared_board)
 		print_bottom_row(player_1_board, player_2_board)
 	end
 
@@ -21,9 +22,9 @@ module BoardPresenter
 
 	def self.print_top_row(player_1_positions, player_2_positions)
 		top_row = [
-			player_1_positions.shift.map(&:to_s),
+			player_1_positions.entry_row.map(&:to_s),
 			"                      ",
-			player_2_positions.shift.reverse_each.map(&:to_s)
+			player_2_positions.entry_row.reverse_each.map(&:to_s)
 		].join
 		puts top_row		
 	end
@@ -37,9 +38,9 @@ module BoardPresenter
 	def self.print_bottom_row(player_1_positions, player_2_positions)
 		bottom_row = [
 			"              ",
-			player_1_positions.pop.reverse_each.map(&:to_s),
+			player_1_positions.exit_row.reverse_each.map(&:to_s),
 			"                      ",
-			player_2_positions.pop.map(&:to_s)
+			player_2_positions.exit_row.map(&:to_s)
 		].join
 		puts bottom_row
 	end

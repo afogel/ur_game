@@ -10,7 +10,7 @@ class MoveGenerator
 
 	def generate!
 		options = []
-		if dice_roll > 0 && player.pieces_remaining > 0
+		if player.board.can_add_new_piece?(dice_roll)
 			options.push(:add_piece_to_board)
 		end
 		options

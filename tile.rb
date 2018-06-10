@@ -13,9 +13,9 @@ class Tile
 
 	def to_s
 		if @occupied
-			" [ X ] "
+			" [ #{"X".send(@occupied.color.to_sym)} ] "
 		else
+			@rosary ? " [ #{"*".yellow} ] "  : ' [   ] '
 		end
-		@rosary ? " [ #{"*".yellow} ] "  : ' [   ] '
 	end
 end

@@ -1,4 +1,6 @@
+require 'pry-byebug'
 require_relative './tile.rb'
+require_relative './player.rb'
 require_relative './board_presenter.rb'
 
 class GameController
@@ -15,15 +17,25 @@ class GameController
 			Tile.new,
 			Tile.new
 		]
-		@player_1 = generate_player_board(@shared_board)
-		@player_2 = generate_player_board(@shared_board)
+		puts "Player one, what is your name?"
+		player_1_name = gets.chomp
+		@player_1 = Player.new(shared_board, player_1_name)
+		puts "Player two, what is your name?"
+		player_2_name = gets.chomp
+		@player_2 = Player.new(shared_board, player_2_name)
 	end
 
 	def play_game
-		print_board
-		puts "Next move:"
-		a = gets
-		puts a
+		[player_1, player_2].each do |player|
+			system "clear"
+			print_board
+			dice_roll = Random.new.rand(5)
+			puts "Dice roll: #{dice_roll}"
+			if dice_roll > 0
+				puts "Your move, #{player.name}:"
+				move = gets.chomp
+			end
+		end
 	end
 
 	private 
@@ -31,19 +43,9 @@ class GameController
 	def print_board
  		BoardPresenter.print!(player_1, player_2)
 	end
-
-	def generate_player_board(shared_board)
-		[
-			[Tile.new, Tile.new, Tile.new, Tile.new(rosary: true)], 
-			shared_board, 
-			[Tile.new, Tile.new(rosary: true)]
-		]
-	end
 end
 
 gc = GameController.new
-print gc.player_1
 while true
-	print gc.player_1
 	gc.play_game
 end

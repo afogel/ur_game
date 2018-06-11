@@ -31,13 +31,13 @@ module BoardPresenter
 
 	def self.print_shared_board(shared_board)
 		shared_board.each do |tile|
-			puts "                                    #{tile}"
+			puts "                                          #{tile}"
 		end
 	end
 
 	def self.print_bottom_row(player_1_positions, player_2_positions)
 		bottom_row = [
-			"              ",
+			"                  ",
 			player_1_positions.exit_row.reverse_each.map(&:to_s),
 			"                      ",
 			player_2_positions.exit_row.map(&:to_s)

@@ -3,6 +3,7 @@ require_relative './tile.rb'
 require_relative './player.rb'
 require_relative './move_generator.rb'
 require_relative './board_presenter.rb'
+require_relative './move_presenter.rb'
 require_relative './board_executioner.rb'
 
 class GameController
@@ -21,13 +22,10 @@ class GameController
 		]
 		puts "Player one, what is your name?"
 		player_1_name = gets.chomp
-		@player_1 = Player.new(shared_board, player_1_name, 'blue')
+		@player_1 = Player.new(shared_board, player_1_name, 'cyan')
 		puts "Player two, what is your name?"
 		player_2_name = gets.chomp
 		@player_2 = Player.new(shared_board, player_2_name, 'red')
-		@move_hash = {
-			add_piece_to_board: 'Add a new piece to the board'
-		}
 	end
 
 	def play_game
@@ -39,7 +37,7 @@ class GameController
 			moves = MoveGenerator.new(player, dice_roll).generate!
 			if dice_roll > 0
 				puts "Your move, #{player.name}:"
-				moves.each_with_index { |option, index| puts "#{index+1}) #{move_hash[option]}"}
+				MovePresenter.new(dice_roll, moves).print_moves
 				move = gets.chomp
 				if move.to_i == 0 or move.to_i > moves.length + 1
 					puts "Invalid option, try again."

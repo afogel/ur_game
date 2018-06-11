@@ -17,10 +17,10 @@ class Board
 		board_entry_positions[dice_roll - 1].unoccupied?
 	end
 
-	def valid_moves(player_name, dice_roll)
+	def valid_moves(player, dice_roll)
 		full_board.map.with_index(0) do |tile, index|
 			next unless tile.occupied
-			player_owns_piece = tile.occupied.player == player_name
+			player_owns_piece = tile.occupied.player == player
 			tile_can_be_moved = valid_move(index, dice_roll)
 			tile.occupied if tile.occupied && player_owns_piece && tile_can_be_moved
 		end
@@ -30,12 +30,13 @@ class Board
 		board[0][number_of_moves - 1].set_piece!(piece)
 	end
 
-	def move_piece!(piece_id, dice_roll)
+	def move_piece!(piece_id, dice_roll, player)
 		full_board.each_with_index do |tile, index|
 			next unless tile.occupied and tile.occupied.id == piece_id.to_i
 			piece = tile.occupied
 			tile.remove_piece!
-			full_board[index + dice_roll].set_piece!(piece)
+			removed_piece = full_board[index + dice_roll].set_piece!(piece)
+			removed_piece.player.pieces.push(removed_piece) unless removed_piece.nil?
 			break
 		end
 	end

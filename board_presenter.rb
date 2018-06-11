@@ -13,9 +13,9 @@ module BoardPresenter
 
 	def self.print_stats(player_1, player_2)
 		puts "#{player_1.name}'s score:"
-		puts "#{player_1.name}'s remaining pieces:"
+		puts "#{player_1.name}'s remaining pieces: #{player_1.pieces.map(&:to_s).join}"
 		puts "#{player_2.name}'s score:"
-		puts "#{player_2.name}'s remaining pieces:"
+		puts "#{player_2.name}'s remaining pieces: #{player_2.pieces.map(&:to_s).join}"
 		puts ""
 		puts ""
 	end

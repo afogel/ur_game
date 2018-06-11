@@ -9,7 +9,9 @@ class Tile
 	end
 
 	def set_piece!(piece)
+		removed_piece = occupied if occupied
 		@occupied = piece
+		removed_piece
 	end
 
 	def remove_piece!

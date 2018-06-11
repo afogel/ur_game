@@ -30,22 +30,7 @@ class GameController
 
 	def play_game
 		[player_1, player_2].each do |player|
-			system "clear"
-			print_board
-			dice_roll = Random.new.rand(5)
-			puts "Dice roll: #{dice_roll}"
-			moves = MoveGenerator.new(player, dice_roll).generate!
-			if dice_roll > 0
-				puts "Your move, #{player.name}:"
-				MovePresenter.new(dice_roll, moves).print_moves
-				move = gets.chomp
-				if move.to_i == 0 or move.to_i > moves.length + 1
-					puts "Invalid option, try again."
-					move = gets.chomp
-				else
-					BoardExecutioner.update_board(moves[move.to_i-1], player, dice_roll)
-				end
-			end
+			play_turn!(player)
 		end
 	end
 
@@ -53,6 +38,34 @@ class GameController
 
 	def print_board
  		BoardPresenter.print!(player_1, player_2)
+	end
+
+	def execute_move(user_input, moves, player, dice_roll)
+		begin
+			raise Exception if user_input.to_i == 0
+			after_effects = BoardExecutioner.update_board(
+				moves[user_input.to_i-1], 
+				player, 
+				dice_roll
+			)
+			play_turn!(player) if after_effects == :go_again!
+		rescue Exception => e
+			puts "Invalid option, try again."
+			user_input = gets.chomp
+			execute_move(user_input, moves, player, dice_roll)
+		end
+	end
+
+	def play_turn!(player)
+		system "clear"
+		print_board
+		dice_roll = Random.new.rand(5)
+		puts "Dice roll: #{dice_roll}"
+		moves = MoveGenerator.new(player, dice_roll).generate!
+		puts "Your move, #{player.name.send(player.color.to_sym)}:"
+		MovePresenter.new(dice_roll, moves, player.color).print_moves
+		user_input = gets.chomp
+		execute_move(user_input, moves, player, dice_roll)
 	end
 end
 

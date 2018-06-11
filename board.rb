@@ -37,6 +37,7 @@ class Board
 			tile.remove_piece!
 			removed_piece = full_board[index + dice_roll].set_piece!(piece)
 			removed_piece.player.pieces.push(removed_piece) unless removed_piece.nil?
+			return :go_again! if full_board[index + dice_roll].rosary
 			break
 		end
 	end

@@ -14,6 +14,7 @@ class Player
 
 	def add_piece_to_board!(dice_roll)
 		board.add_piece!(pieces.shift, dice_roll)
+		return :go_again! if board.entry_row[dice_roll - 1].rosary
 	end
 
 	def move_piece!(piece_id, dice_roll)

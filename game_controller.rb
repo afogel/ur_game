@@ -5,9 +5,10 @@ require_relative './move_generator.rb'
 require_relative './board_presenter.rb'
 require_relative './move_presenter.rb'
 require_relative './board_executioner.rb'
+require_relative './game_log.rb'
 
 class GameController
-	attr_reader :shared_board, :player_1, :player_2, :move_hash
+	attr_reader :shared_board, :player_1, :player_2, :game_log
 
 	def initialize
 		@shared_board = [
@@ -26,6 +27,7 @@ class GameController
 		puts "Player two, what is your name?"
 		player_2_name = gets.chomp
 		@player_2 = Player.new(shared_board, player_2_name, 'red')
+		@game_log = GameLog.new
 	end
 
 	def play_game
@@ -34,22 +36,25 @@ class GameController
 		end
 	end
 
-	private 
+	private
 
 	def print_board
- 		BoardPresenter.print!(player_1, player_2)
+ 		BoardPresenter.print!(player_1, player_2, game_log.last_moves)
 	end
 
 	def execute_move(user_input, moves, player, dice_roll)
 		begin
 			raise Exception if user_input.to_i == 0
+			move = moves[user_input.to_i-1]
 			after_effects = BoardExecutioner.update_board(
-				moves[user_input.to_i-1], 
-				player, 
+				move,
+				player,
 				dice_roll
 			)
+			game_log.add_move_to_log!(move, player, dice_roll, after_effects)
 			play_turn!(player) if after_effects == :go_again!
 		rescue Exception => e
+			# binding.pry
 			puts "Invalid option, try again."
 			user_input = gets.chomp
 			execute_move(user_input, moves, player, dice_roll)

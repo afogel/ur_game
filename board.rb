@@ -5,8 +5,8 @@ class Board
 	attr_reader :board
 	def initialize(shared_board)
 		@board = [
-			[Tile.new, Tile.new, Tile.new, Tile.new(rosary: true)], 
-			shared_board, 
+			[Tile.new, Tile.new, Tile.new, Tile.new(rosary: true)],
+			shared_board,
 			[Tile.new, Tile.new(rosary: true)]
 		]
 	end
@@ -62,7 +62,8 @@ class Board
 
 	def valid_move(index, dice_roll)
 		player_piece = full_board[index].occupied
-		destination_index = index + dice_roll 
+		destination_index = index + dice_roll
+		# binding.pry if destination_index + 1 == full_board.length
 		move_is_on_board = destination_index + 1 <= full_board.length
 		move_is_on_board and (full_board[destination_index].unoccupied? or
 			full_board[destination_index].can_be_captured?(player_piece))

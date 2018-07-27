@@ -1,7 +1,8 @@
 require 'pry-byebug'
 module BoardPresenter
-	def self.print!(player_1, player_2)
+	def self.print!(player_1, player_2, last_moves = nil)
 		print_stats(player_1, player_2)
+		print_last_moves(last_moves)
 		player_1_board = player_1.board.dup
 		player_2_board = player_2.board.dup
 		print_top_row(player_1_board, player_2_board)
@@ -10,6 +11,12 @@ module BoardPresenter
 	end
 
 	private
+
+	def self.print_last_moves(last_moves)
+		return if last_moves.nil?
+		last_moves.each { |move| puts move }
+		3.times { puts "" }
+	end
 
 	def self.print_stats(player_1, player_2)
 		puts "#{player_1.name}'s score:"
@@ -26,7 +33,7 @@ module BoardPresenter
 			"                      ",
 			player_2_positions.entry_row.reverse_each.map(&:to_s)
 		].join
-		puts top_row		
+		puts top_row
 	end
 
 	def self.print_shared_board(shared_board)
